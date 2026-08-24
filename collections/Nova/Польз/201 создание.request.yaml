@@ -1,0 +1,11 @@
+$kind: http-request
+url: https://test.mynova.kz/api/v1/auth/login
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "login": "erasyl_amirkhanov",
+        "password": "DcslnpCSZ@1"
+    }
+order: 1787114025534

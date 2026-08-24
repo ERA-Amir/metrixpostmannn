@@ -1,0 +1,5 @@
+$kind: http-request
+name: New Request
+url: " {{base_url}}/v1/admin/organizations"
+method: POST
+order: 4346895416071040

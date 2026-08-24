@@ -1,0 +1,14 @@
+$kind: http-request
+url: "{{base_url}}/api/v1/admin/users"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "username": "admincreated1",
+      "password": "TempPass123!",
+      "email": "admincreated1@example.com",
+      "full_name": "Admin Created User",
+      "role": "user"
+    }
+order: 4475253296357692

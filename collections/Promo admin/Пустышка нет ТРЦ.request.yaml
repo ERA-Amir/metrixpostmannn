@@ -1,0 +1,13 @@
+$kind: http-request
+name: Пустышка нет ТРЦ
+url: "{{base_url}}/api/v2/admin/users?unassigned=true&limit=500&offset=0"
+method: GET
+queryParams:
+  unassigned: "true"
+  limit: "500"
+  offset: "0"
+auth:
+  type: inherit
+  credentials:
+    id: 1b7193a0-15a7-4cfd-a94d-c01a377e2bfa
+order: 4330901443097993

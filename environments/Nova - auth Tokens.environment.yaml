@@ -1,0 +1,11 @@
+name: Nova - auth Tokens
+values:
+  - key: access_token
+    description: 'MyNova test env access token (admin role), expires ~8h from issue'
+    secret: true
+  - key: refresh_token
+    description: 'MyNova test env refresh token, expires ~30d — rotates on use, single-use'
+    secret: true
+  - key: base_url
+    value: ''
+color: 60

@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{base_url}}/api/v1/auth/forgot-password"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "email": "erasyl_amirkhanov@mail.com"
+    }
+order: 4258884209870493

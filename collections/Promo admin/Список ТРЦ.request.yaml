@@ -1,0 +1,9 @@
+$kind: http-request
+name: Список ТРЦ
+url: "{{base_url}}/api/v2/admin/shopping-centers"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{access_token}}"
+order: 3725762812962848

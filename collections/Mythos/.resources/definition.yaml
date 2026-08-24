@@ -1,0 +1,6 @@
+$kind: collection
+name: Mythos
+variables:
+  - key: json_web_token_0cx8
+    secret: true
+    disabled: false

@@ -1,0 +1,12 @@
+$kind: http-request
+name: Замена данных2
+url: "{{base_url}}/api/v1/user/organizations/131"
+method: PUT
+body:
+  type: json
+  content: |-
+    {
+      "name": "Rauza",
+      "phone": "+7 (777) 777-77-77"
+    }
+order: 4142894151038199

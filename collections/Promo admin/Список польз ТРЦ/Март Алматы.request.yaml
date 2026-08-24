@@ -1,0 +1,9 @@
+$kind: http-request
+url: "{{base_url}}/api/v2/admin/shopping-centers/1/users?limit=500&offset=0"
+method: GET
+queryParams:
+  limit: "500"
+  offset: "0"
+auth:
+  type: bearer
+order: 1787206376520

@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{base_url}}/api/v2/admin/login"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "username": "Admin_username",
+      "password": "Admin_Password1!"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const data = pm.response.json();
+      if (data.access_token) {
+          pm.environment.set("access_token", data.access_token);
+      }
+    language: text/javascript
+order: 1508761602574375

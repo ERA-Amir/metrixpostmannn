@@ -1,0 +1,49 @@
+$kind: http-request
+url: "{{base_url}}/api/v1/catalog/nomenclatures?page={{page}}&per_page=100&stat\
+  us=draft%2Crejected%2Cai_error"
+method: GET
+queryParams:
+  page: "{{page}}"
+  per_page: "100"
+  status: draft%2Crejected%2Cai_error
+scripts:
+  - type: afterResponse
+    code: |-
+      let page = Number(pm.environment.get("page") || 1);
+
+      let response = pm.response.json();
+
+      let all = JSON.parse(
+          pm.environment.get("all_nomenclatures") || "[]"
+      );
+
+      if (Array.isArray(response.data)) {
+          all.push(...response.data);
+      }
+
+      pm.environment.set(
+          "all_nomenclatures",
+          JSON.stringify(all)
+      );
+
+      console.log(
+          `Страница ${page}/1966. Всего собрано: ${all.length}`
+      );
+
+      if (page < 1966) {
+
+          pm.environment.set("page", page + 1);
+
+          pm.execution.setNextRequest(pm.info.requestName);
+
+      } else {
+
+          console.log("================================");
+          console.log("ГОТОВО");
+          console.log(`Всего объектов: ${all.length}`);
+          console.log("================================");
+
+          pm.execution.setNextRequest(null);
+      }
+    language: text/javascript
+order: 910623170585676

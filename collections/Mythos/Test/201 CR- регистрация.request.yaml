@@ -1,0 +1,30 @@
+$kind: http-request
+name: 201 CR- регистрация
+url: "{{base_url_M}}/register"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "username": "ERA_55",
+      "password": "secure_pass1"
+    }
+order: 1992270255772722
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 201", function () {
+        pm.response.to.have.status(201);
+      });
+      pm.test("Response has message field", function () {
+        var json = pm.response.json();
+        pm.expect(json).to.have.property("message");
+      });
+      pm.test("message equals 'Регистрация успешна'", function () {
+        var json = pm.response.json();
+        pm.expect(json.message).to.eql("Регистрация успешна");
+      });
+      pm.test("Response time is less than 2000ms", function () {
+        pm.expect(pm.response.responseTime).to.be.below(2000);
+      });

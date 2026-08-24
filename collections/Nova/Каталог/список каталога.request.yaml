@@ -1,0 +1,5 @@
+$kind: http-request
+name: список каталога
+url: "{{base_url}}/catalog"
+method: GET
+order: 1787113876441

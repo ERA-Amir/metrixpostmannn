@@ -1,0 +1,8 @@
+$kind: http-request
+name: Форум
+url: "{{base_url}}/api/v2/admin/shopping-centers/8/users?limit=500&offset=0"
+method: GET
+queryParams:
+  limit: "500"
+  offset: "0"
+order: 1312975973508954

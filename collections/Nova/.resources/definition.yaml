@@ -1,0 +1,23 @@
+$kind: collection
+name: Nova
+variables:
+  - key: supabase_service_role_api_key_0gdh
+    secret: true
+    disabled: false
+  - key: json_web_token_0f89
+    secret: true
+    disabled: false
+  - key: supabase_service_role_api_key_0f89
+    secret: true
+    disabled: false
+  - key: supabase_service_role_api_key_13ow
+    secret: true
+    disabled: false
+auth:
+  - id: 534d7b30-e034-41b9-9408-a393f8e6cb05
+    type: bearer
+    name: Bearer Token
+    credentials:
+      token: "{{supabase_service_role_api_key_13ow}}"
+    rules:
+      url: test.mynova.kz/*

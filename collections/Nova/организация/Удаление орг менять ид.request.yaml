@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{base_url}}/api/v1/user/organizations/133"
+method: DELETE
+order: 4365311975269538

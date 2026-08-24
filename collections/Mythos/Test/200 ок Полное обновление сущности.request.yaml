@@ -1,0 +1,40 @@
+$kind: http-request
+name: 200 ок Полное обновление сущности
+url: "{{base_url_M}}/mythology/36"
+method: PUT
+body:
+  type: json
+  content: |-
+    {
+      "name": "ТЦК",
+      "category": "gods",
+      "desc": "Бог морей и землетрясений др.",
+      "img": "https://images.unsplash.com/photo-1503152394-c571994fd383"
+    }
+order: 4496531432465234
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+        pm.response.to.have.status(200);
+      });
+      pm.test("id equals 36", function () {
+        var json = pm.response.json();
+        pm.expect(json.id).to.eql(36);
+      });
+      pm.test("name equals 'ТЦК'", function () {
+        var json = pm.response.json();
+        pm.expect(json.name).to.eql("ТЦК");
+      });
+      pm.test("desc equals 'Бог морей и землетрясений др.'", function () {
+        var json = pm.response.json();
+        pm.expect(json.desc).to.eql("Бог морей и землетрясений др.");
+      });
+      pm.test("category equals 'gods'", function () {
+        var json = pm.response.json();
+        pm.expect(json.category).to.eql("gods");
+      });
+      pm.test("Response time is less than 2000ms", function () {
+        pm.expect(pm.response.responseTime).to.be.below(2000);
+      });

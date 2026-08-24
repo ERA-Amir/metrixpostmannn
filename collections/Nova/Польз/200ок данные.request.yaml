@@ -1,0 +1,5 @@
+$kind: http-request
+name: 200ок данные
+url: https://test.mynova.kz/api/v1/user/me
+method: GET
+order: 4464926848366589

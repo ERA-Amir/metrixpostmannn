@@ -1,0 +1,9 @@
+name: Promo
+values:
+  - key: base_url
+    value: ''
+  - key: access_token
+    secret: true
+  - key: refresh_token
+    secret: true
+color: 240

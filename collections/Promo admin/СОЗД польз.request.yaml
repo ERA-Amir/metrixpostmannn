@@ -1,0 +1,21 @@
+$kind: http-request
+name: СОЗД польз
+url: "{{base_url}}/api/v2/test/users"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "id": 0,
+      "phone": "77087714558",
+      "password": "string",
+      "name": "Enlik",
+      "surname": "string",
+      "birth_date": "2026-08-24",
+      "bonus_balance": 0,
+      "coupon_balance": 0,
+      "balance_kzt": 0,
+      "pending_kzt": 0,
+      "mall_id": 8
+    }
+order: 4049997691212190

@@ -1,0 +1,12 @@
+$kind: http-request
+name: Форум
+url: "{{base_url}}/api/v2/admin/shopping-centers/8/coupon-users?limit=500&offset=0"
+method: GET
+queryParams:
+  limit: "500"
+  offset: "0"
+auth:
+  type: inherit
+  credentials:
+    id: 1b7193a0-15a7-4cfd-a94d-c01a377e2bfa
+order: 1910901363187850

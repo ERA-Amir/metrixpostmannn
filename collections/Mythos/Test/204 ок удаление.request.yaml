@@ -1,0 +1,18 @@
+$kind: http-request
+name: 204 ок удаление
+url: "{{base_url_M}}/mythology/36"
+method: DELETE
+order: 4501974702378452
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 204", function () {
+        pm.response.to.have.status(204);
+      });
+      pm.test("Response body is empty", function () {
+        pm.expect(pm.response.text()).to.be.empty;
+      });
+      pm.test("Response time is less than 2000ms", function () {
+        pm.expect(pm.response.responseTime).to.be.below(2000);
+      });

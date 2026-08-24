@@ -1,0 +1,11 @@
+$kind: http-request
+url: "{{base_url}}/api/v1/user/organizations/129"
+method: PUT
+body:
+  type: json
+  content: |-
+    {
+      "name": "Магазин на Абая 2",
+      "phone": "+7 (777) 777-77-77"
+    }
+order: 4109002064779037

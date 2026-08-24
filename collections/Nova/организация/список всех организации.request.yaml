@@ -1,0 +1,8 @@
+$kind: http-request
+name: список всех организации
+url: "{{base_url}}/api/v1/user/organizations?page=1&per_page=100"
+method: GET
+queryParams:
+  page: "1"
+  per_page: "100"
+order: 4341265512679002

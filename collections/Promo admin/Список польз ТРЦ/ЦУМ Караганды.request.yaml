@@ -1,0 +1,8 @@
+$kind: http-request
+name: ЦУМ Караганды
+url: "{{base_url}}/api/v2/admin/shopping-centers/6/users?limit=500&offset=0"
+method: GET
+queryParams:
+  limit: "500"
+  offset: "0"
+order: 4503530655092193

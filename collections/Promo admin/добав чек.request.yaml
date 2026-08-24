@@ -1,0 +1,27 @@
+$kind: http-request
+name: добав чек
+url: "{{base_url}}/api/v2/admin/users/594/receipts/manual"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "mall_id": 1,
+      "fiscal_rnm": "603404534439",
+      "company_bin": "125346755411",
+      "fiscal_fn": "241414",
+      "fiscal_fd": "9988771",
+      "fiscal_fpd": "55667788",
+      "total_amount": 350000,
+      "receipt_time": "2026-08-20T06:00:00.000Z",
+      "items": [
+        { "name": "Мышь", "quantity": 1, "price": 350000, "sum": 350000 }
+      ]
+    }
+auth:
+  type: inherit
+  credentials:
+    id: 1b7193a0-15a7-4cfd-a94d-c01a377e2bfa
+order: 1610378203918271
