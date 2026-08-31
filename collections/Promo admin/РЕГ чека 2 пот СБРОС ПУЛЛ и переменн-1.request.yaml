@@ -1,0 +1,138 @@
+$kind: http-request
+name: РЕГ чека 2 пот СБРОС ПУЛЛ и переменная mall_id послед версия усоверш
+url: "{{base_url}}/api/v2/admin/users/{{user_id}}/receipts/manual"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "mall_id": {{mall_id}},
+      "company_bin": "{{company_bin}}",
+      "total_amount": {{amount}},
+      "receipt_time": "{{receipt_time}}",
+      "items": [{ "name": "{{item_name}}", "quantity": 1, "price": {{amount}}, "sum": {{amount}} }]
+    }
+auth:
+  type: inherit
+  credentials:
+    id: 1b7193a0-15a7-4cfd-a94d-c01a377e2bfa
+scripts:
+  - type: beforeRequest
+    code: |-
+      //  MALL CONFIG (mall_id -> список арендаторов: bin + категория) 
+      // Собрано по данным Malls -> List My Malls + Tenants -> List Tenants (2026-08-26).
+      // Каждый прогон случайно выбирает ОДНОГО арендатора из списка ТРЦ -> его BIN и его категория
+      // товаров идут в паре (чтобы в чеке БИН и товар всегда соответствовали друг другу).
+      // category "mixed" = арендатор без явной товарной специализации (тестовый/дефолтный).
+      const MALL_CONFIG = {
+        1: [
+          { company_bin: '123456789012', category: 'mixed' },       // Тестовый мир
+          { company_bin: '125346755411', category: 'electronics' }, // Магазин электроники
+          { company_bin: '770216402492', category: 'mixed' },       // Дайтона
+          { company_bin: '960722400744', category: 'kids' },        // TinyJump
+          { company_bin: '123456789012', category: 'mixed' },       // QA Test Org 2
+        ],
+        2: [
+          { company_bin: '770216402492', category: 'mixed' },       // Дайтона
+        ],
+        3: [
+          { company_bin: '770216402492', category: 'mixed' },       // Дайтона
+          { company_bin: '960722400744', category: 'kids' },        // TinyJump
+        ],
+        4: [
+          { company_bin: '770216402492', category: 'mixed' },       // Дайтона
+        ],
+        5: [
+          { company_bin: '770216402492', category: 'mixed' },       // Дайтона
+        ],
+        6: [
+          { company_bin: '770216402492', category: 'mixed' },       // Дайтона
+        ],
+        8: [
+          { company_bin: '123456789997', category: 'clothing' },    // LC Waikiki
+          { company_bin: '123456789999', category: 'clothing' },    // Pull&Bear
+          { company_bin: '999888777666', category: 'clothing' },    // Zara
+          { company_bin: '123456123456', category: 'clothing' },    // Puma
+          { company_bin: '123456789012', category: 'clothing' },    // H&M
+        ],
+        10: [
+          { company_bin: '930526300094', category: 'mixed' },       // Даулет-inc
+          { company_bin: '930526300093', category: 'mixed' },       // CooLj
+        ],
+        11: [
+          { company_bin: '770216402492', category: 'mixed' },       // арендаторов пока нет, дефолтный BIN
+        ],
+      };
+
+      const ITEM_POOLS = {
+        clothing: ['Куртка','Кроссовки','Свитшот','Шарф','Носки','Кепка','Перчатки','Футболка','Джинсы','Толстовка'],
+        electronics: ['Наушники','Powerbank','Смартфон','Ноутбук','Часы','Зарядное устройство','Колонка','Планшет'],
+        kids: ['Игрушка','Конструктор','Рюкзак школьный','Кроссовки детские','Настольная игра','Раскраска','Мяч'],
+        mixed: ['Наушники','Кроссовки','Рюкзак','Куртка','Термокружка','Футболка','Часы','Кепка','Сумка','Плед','Носки','Зонт','Свитшот','Кружка','Перчатки','Шарф','Портфель'],
+      };
+
+      const mallId = Number(pm.collectionVariables.get('mall_id'));
+      const tenants = MALL_CONFIG[mallId];
+
+      if (!tenants || !tenants.length) {
+          throw new Error(`MALL_CONFIG не содержит арендаторов для mall_id=${mallId}. Добавьте их в начало Pre-request Script.`);
+      }
+
+      // Случайный арендатор -> его BIN и его категория идут в паре
+      const tenant = tenants[Math.floor(Math.random() * tenants.length)];
+      pm.collectionVariables.set('company_bin', tenant.company_bin);
+      const itemPool = ITEM_POOLS[tenant.category] || ITEM_POOLS.mixed;
+
+      // ================= Пул пользователей (fetch один раз за прогон) =================
+      async function ensureUserPool() {
+          if (pm.collectionVariables.get('user_pool_ready') === 'true') return;
+
+          const res = await pm.sendRequest({
+              url: pm.collectionVariables.get('base_url') + '/api/v2/admin/users?limit=500&offset=0',
+              method: 'GET',
+              header: { Authorization: 'Bearer ' + pm.collectionVariables.get('access_token') }
+          });
+
+          const body = res.json();
+          const users = Array.isArray(body) ? body : (body.items || []);
+          const ids = users.map(u => u.id || u.user_id);
+
+          // Fisher-Yates shuffle
+          for (let i = ids.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [ids[i], ids[j]] = [ids[j], ids[i]];
+          }
+
+          pm.collectionVariables.set('user_pool', JSON.stringify(ids));
+          pm.collectionVariables.set('user_pool_ready', 'true');
+      }
+
+      await ensureUserPool();
+
+      const pool = JSON.parse(pm.collectionVariables.get('user_pool') || '[]');
+      const nextUserId = pool.pop();
+      if (!nextUserId) {
+          throw new Error('Пул пользователей пуст. Остановите Runner или очистите user_pool_ready для нового набора.');
+      }
+      pm.collectionVariables.set('user_pool', JSON.stringify(pool));
+      pm.collectionVariables.set('user_id', String(nextUserId));
+
+      // Случайные amount / receipt_time / item_name 
+      const amount = 20000 + Math.floor(Math.random() * 21) * 500; // 20000..30000 шаг 500
+      pm.collectionVariables.set('amount', String(amount));
+
+      const tenDaysMs = 10 * 24 * 60 * 60 * 1000;
+      const receiptTime = new Date(Date.now() - Math.floor(Math.random() * tenDaysMs)).toISOString();
+      pm.collectionVariables.set('receipt_time', receiptTime);
+
+      const itemName = itemPool[Math.floor(Math.random() * itemPool.length)];
+      pm.collectionVariables.set('item_name', itemName);
+
+      //  Busy-wait ~3500ms (лимит 20 req/min) 
+      const delayMs = 3500;
+      const start = Date.now();
+      while (Date.now() - start < delayMs) { /* busy wait */ }
+    language: text/javascript
+order: 3329986449800053

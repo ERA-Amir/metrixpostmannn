@@ -1,5 +1,4 @@
 $kind: http-request
-name: добав чек
 url: "{{base_url}}/api/v2/admin/users/594/receipts/manual"
 method: POST
 headers:

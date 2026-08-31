@@ -1,5 +1,5 @@
 $kind: http-request
-name: МАСС РЕГ чека 2
+name: МАСС РЕГ чека пот СБРОС ПУЛЛ по итерации (улучш2)
 url: "{{base_url}}/api/v2/admin/users/{{user_id}}/receipts/manual"
 method: POST
 headers:
@@ -8,8 +8,8 @@ body:
   type: json
   content: |-
     {
-      "mall_id": 1,
-      "company_bin": "125346755411",
+      "mall_id": 5,
+      "company_bin": "770216402492",
       "total_amount": {{amount}},
       "receipt_time": "{{receipt_time}}",
       "items": [
@@ -23,7 +23,11 @@ auth:
 scripts:
   - type: beforeRequest
     code: |-
-      // ==== Один раз за весь прогон: подтягиваем актуальный список всех пользователей ====
+      // Целевой ТРЦ и арендатор для этого прогона 
+      pm.collectionVariables.set('mall_id', 5);
+      pm.collectionVariables.set('company_bin', '770216402492');
+
+      //  Один раз за весь прогон: подтягиваем актуальный список всех пользователей 
       if (!pm.collectionVariables.get('user_pool_ready')) {
           try {
               const res = await pm.sendRequest({
@@ -34,7 +38,6 @@ scripts:
               const data = res.json();
               let ids = data.items.map(u => u.id);
 
-              // Перемешиваем (Fisher-Yates), чтобы не было повторов
               for (let i = ids.length - 1; i > 0; i--) {
                   const j = Math.floor(Math.random() * (i + 1));
                   [ids[i], ids[j]] = [ids[j], ids[i]];
@@ -71,6 +74,8 @@ scripts:
       // Пауза перед отправкой (лимит 20 запросов/минуту)
       const delayMs = 3500;
       const start = Date.now();
-      while (Date.now() - start < delayMs) {}
+      while (Date.now() - start < delayMs) {
+          // синхронная пауза перед каждым запросом
+      }
     language: text/javascript
-order: 3311748476225974
+order: 2914121551292515

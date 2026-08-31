@@ -1,25 +1,10 @@
 $kind: collection
 name: Promo admin
 variables:
-  - key: json_web_token_0y6h
+  - key: access_token
     secret: true
     disabled: false
-  - key: user_id
-    value: ""
-    disabled: false
-  - key: amount
-    value: ""
-    disabled: false
-  - key: receipt_time
-    value: ""
-    disabled: false
-  - key: item_name
-    value: ""
-    disabled: false
   - key: mall_id
-    value: ""
-    disabled: false
-  - key: company_bin
     value: ""
     disabled: false
 auth:
